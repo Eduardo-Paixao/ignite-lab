@@ -8,6 +8,7 @@ import {
 } from "phosphor-react";
 import "@vime/core/themes/default.css";
 import { useGetLessonBySlugQuery } from "../graphql/generated";
+import { isPast } from "date-fns";
 
 interface VideoProps {
   lessonSlug: string;
@@ -27,14 +28,14 @@ export const Video = ({ lessonSlug }: VideoProps) => {
       </div>
     );
   }
-
+  const isAvailableAt = isPast(data.lesson.availableAt);
   return (
     <div className="flex-1">
       <div className="bg-black justify-center flex">
         <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
           <Player>
             <Youtube videoId={data.lesson.videoId} />
-            <DefaultUi />
+            {isAvailableAt && <DefaultUi />}
           </Player>
         </div>
       </div>
